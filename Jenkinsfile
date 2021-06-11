@@ -15,7 +15,7 @@ stage("docker image build") {
         }
 steps {
        script {
-            app = docker.build("reddydinesh050697/0609")
+            app = docker.build("reddydinesh/0611")
             app.inside {
                  sh 'echo $(curl localhost:8080)'
 }
