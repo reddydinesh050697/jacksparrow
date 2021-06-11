@@ -11,7 +11,7 @@ steps {
 }
 stage("docker image build") {
    when {
-       branch 'master'
+       branch 'dev'
         }
 steps {
        script {
