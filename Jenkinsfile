@@ -16,9 +16,6 @@ stage("docker image build") {
 steps {
        script {
             app = docker.build("reddydinesh/hi")
-            app.inside {
-                 sh 'echo $(curl localhost:8080)'
-}
 }
 }
 }
@@ -35,7 +32,7 @@ steps {
 }
 }
 }
-}
+
 
 
                   
