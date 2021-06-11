@@ -16,6 +16,9 @@ stage("docker image build") {
 steps {
        script {
             app = docker.build("reddydinesh/hi")
+            app.inside {
+                sh 'echo $(curl localhost:8080)'
+}
 }
 }
 }
@@ -27,6 +30,7 @@ steps {
   script {
     docker.withRegistry('https://registry.hub.docker.com', 'docker') {
        app.push("latest")
+}
 }
 }
 }
