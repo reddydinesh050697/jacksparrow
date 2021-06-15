@@ -2,7 +2,7 @@ pipeline {
 agent any
 stages {
 stage("scm") {
-steps {git 'https://github.com/reddydinesh/jacksparrow.git'}
+steps {git 'https://github.com/reddydinesh050697/jacksparrow.git'}
 }
 stage("Build") {
 steps {
