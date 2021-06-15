@@ -2,7 +2,7 @@ pipeline {
 agent any
 stages {
 stage("Git") {
-steps {git 'https://github.com/reddydinesh050697/jacksparrow.git'}
+steps {git 'https://github.com/reddydinesh/jacksparrow.git'}
 }
 stage("Build") {
 steps {
@@ -34,8 +34,30 @@ steps {
 }
 }
 }
-}
-}
+       stage('DeployToProduction') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                input 'Deploy to Production?'
+                milestone(1)
+                withCredentials([usernamePassword(credentialsId: 'web', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                    script {
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull reddydinesh/hi:${env.BUILD_NUMBER}\""
+                        try {
+                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker stop Hippo\""
+                            sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker rm Hippo\""
+                        } catch (err) {
+                            echo: 'caught error: $err'
+                        }
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker run --restart always --name Hippo -p 8080:8080 -d reddydinesh/hi:${env.BUILD_NUMBER}\""
+                    }
+                }
+            }
+        }
+    }
+} 
+
 
 
 
